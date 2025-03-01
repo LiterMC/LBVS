@@ -9,13 +9,13 @@ import com.github.litermc.lbvs.LBVSMod;
 
 @Mod(LBVSMod.MOD_ID)
 public class LBVSModForge {
-    public LBVSModForge() {
-        IEventBus MOD_BUS = FMLJavaModLoadingContext.get().getModEventBus();
-        MOD_BUS.addListener(this::clientSetup);
-        LBVSMod.init();
-    }
+	public LBVSModForge() {
+		final IEventBus MOD_BUS = FMLJavaModLoadingContext.get().getModEventBus();
+		MOD_BUS.addListener(this::clientSetup);
+		LBVSMod.init();
+	}
 
-    private void clientSetup(FMLClientSetupEvent event) {
-        LBVSMod.initClient();
-    }
+	private void clientSetup(final FMLClientSetupEvent event) {
+		LBVSMod.initClient();
+	}
 }
