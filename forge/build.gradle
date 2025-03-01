@@ -27,8 +27,8 @@ loom {
 
     forge {
         convertAccessWideners = true
-        mixinConfig "vs_addon_template.mixins.json"
-        mixinConfig "vs_addon_template-common.mixins.json"
+        mixinConfig "lbvs.mixins.json"
+        mixinConfig "lbvs-common.mixins.json"
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
     }
 }
@@ -70,7 +70,7 @@ processResources {
     props['vs2_version'] = project.vs2_version.substring(0, project.vs2_version.indexOf('+'))
     props['forge_version'] = project.forge_version.substring(project.forge_version.indexOf('.') + 1)
 
-    filesMatching("META-INF/mods.toml") {
+    filesMatching(["META-INF/mods.toml", "pack.mcmeta"]) {
         expand props
     }
 }
@@ -113,7 +113,7 @@ components.java {
 publishing {
     publications {
         mavenCommon(MavenPublication) {
-            groupId = "org.valkyrienskies.eureka"
+            groupId = "com.github.litermc.lbvs"
             version = project.version
             artifactId = rootProject.archives_base_name + "-" + project.name
             from components.java
@@ -137,7 +137,7 @@ publishing {
             println "Publishing to Github Packages"
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/ValkyrienSkies/Eureka")
+                url = uri("https://maven.pkg.github.com/LiterMC/LBVS")
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")

@@ -1,4 +1,4 @@
-package io.github.techtastic.vs_addon_template.forge.mixin;
+package com.github.litermc.lbvs.forge.mixin;
 
 import java.util.List;
 import java.util.Set;
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 /**
  * For now, just using this class as an abusive early entrypoint to run the updater
  */
-public class ValkyrienForgeMixinConfigPlugin implements IMixinConfigPlugin {
+public class LBVSForgeMixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(final String s) {
