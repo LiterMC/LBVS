@@ -6,6 +6,7 @@ Let's break ship down in Valkyrien Skies.
 ## Features
 
 - Falling tree
+  ![Tree.gif](.assets/tree.gif)
 
 ## TODO
 
