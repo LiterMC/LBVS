@@ -59,7 +59,7 @@ public class LevelListener {
 	}
 
 	private static void onShipBlockUpdated(
-			final ServerLevel level, final BlockPos pos, ServerShip ship,
+			final ServerLevel level, final BlockPos pos, final ServerShip ship,
 			final BlockState oldState, final BlockState newState,
 			final boolean moving) {
 		BlockConnectivityManager manager = BlockConnectivityManager.getInstance();
@@ -93,7 +93,10 @@ public class LevelListener {
 				BlockState st = level.getBlockState(leafPos);
 				if (st.is(BlockTags.LEAVES)) {
 					if (!st.getOptionalValue(LeavesBlock.PERSISTENT).orElse(true)) {
-						AssembleUtil.assembleTree(level, pos, oldState);
+						ServerShip ship = AssembleUtil.assembleTree(level, pos, oldState);
+						if (ship != null) {
+							EventHandler.onTreeAssembled(level, ship);
+						}
 					}
 					return;
 				} else if (st.is(BlockTags.OVERWORLD_NATURAL_LOGS)) {

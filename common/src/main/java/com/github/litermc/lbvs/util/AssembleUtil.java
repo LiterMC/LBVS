@@ -9,8 +9,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import org.valkyrienskies.mod.common.assembly.ShipAssemblyKt;
+import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.util.datastructures.DenseBlockPosSet;
+import org.valkyrienskies.mod.common.assembly.ShipAssemblyKt;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -37,16 +38,16 @@ public final class AssembleUtil {
 	};
 	private static final Vec3i[] NO_DOWN_CORNER_OFFSETS = Direction26.streamAllOffsets().filter(p -> p.getY() >= 0).toArray(Vec3i[]::new);
 
-	public static void assembleTree(final ServerLevel level, final BlockPos pos, final BlockState original) {
+	public static ServerShip assembleTree(final ServerLevel level, final BlockPos pos, final BlockState original) {
 		final List<BlockPos> blocks = findTreeBlocks(level, pos, original.getBlock());
 		if (blocks.size() == 0) {
-			return;
+			return null;
 		}
 		DenseBlockPosSet blockSet = new DenseBlockPosSet();
 		blocks.forEach(p -> {
 			blockSet.add(p.getX(), p.getY(), p.getZ());
 		});
-		ShipAssemblyKt.createNewShipWithBlocks(blocks.get(0), blockSet, level);
+		return ShipAssemblyKt.createNewShipWithBlocks(blocks.get(0), blockSet, level);
 	}
 
 	private static List<BlockPos> findTreeBlocks(final ServerLevel level, final BlockPos pos, final Block block) {
