@@ -77,6 +77,9 @@ public final class AssembleUtil {
 			if (!st.is(BlockTags.LEAVES) || st.getOptionalValue(LeavesBlock.PERSISTENT).orElse(true)) {
 				continue;
 			}
+			if (dist > st.getOptionalValue(LeavesBlock.DISTANCE).orElse(0)) {
+				continue;
+			}
 			boolean invalid = Direction.stream()
 				.map(p::relative)
 				.filter(Predicate.not(logs::contains))
@@ -86,7 +89,7 @@ public final class AssembleUtil {
 				continue;
 			}
 			blocks.add(p);
-			if (dist <= 7) {
+			if (dist < 7) {
 				Direction.stream()
 					.map(p::relative)
 					.filter(Predicate.not(accessed::contains))
