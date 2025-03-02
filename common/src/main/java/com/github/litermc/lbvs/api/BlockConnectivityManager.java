@@ -1,10 +1,11 @@
 package com.github.litermc.lbvs.api;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import com.github.litermc.lbvs.util.Direction26;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -31,11 +32,29 @@ public class BlockConnectivityManager {
 		connectivityTesters.put(blockClass, tester);
 	}
 
-	public boolean canBlockConnect(final ServerLevel level, final BlockPos pos, final Direction dir) {
-		final BlockState state = level.getBlockState(pos);
-		if (state == null) {
-			return false;
+	public boolean shouldCheckConnectivity(
+			final ServerLevel level, final BlockPos pos,
+			final BlockState oldState, final BlockState newState) {
+		final Block block = oldState.getBlock();
+		if (block != newState.getBlock()) {
+			return true;
 		}
+		for (Class<?> blockClass = block.getClass();
+				Block.class.isAssignableFrom(blockClass);
+				blockClass = blockClass.getSuperclass()) {
+			final BlockConnectivityTester tester = connectivityTesters.get(blockClass);
+			if (tester != null) {
+				final Boolean res = tester.shouldCheckConnectivity(level, pos, oldState, newState);
+				if (res != null) {
+					return res;
+				}
+			}
+		}
+		return true;
+	}
+
+	public boolean canBlockConnect(final ServerLevel level, final BlockPos pos, final Direction26 dir) {
+		final BlockState state = level.getBlockState(pos);
 		final Block block = state.getBlock();
 		for (Class<?> blockClass = block.getClass();
 				Block.class.isAssignableFrom(blockClass);

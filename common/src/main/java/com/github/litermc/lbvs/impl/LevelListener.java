@@ -16,24 +16,13 @@ import org.valkyrienskies.mod.common.util.SplittingDisablerAttachment;
 
 import com.github.litermc.lbvs.api.BlockConnectivityManager;
 import com.github.litermc.lbvs.util.AssembleUtil;
+import com.github.litermc.lbvs.util.Direction26;
 import com.github.litermc.lbvs.util.EnumSetProperty;
 
 import java.util.stream.Stream;
 
 public class LevelListener {
-	private static final EnumSetProperty<Direction> VIOLATE_FACES = new EnumSetProperty<>("vs_violate_faces", Direction.class);
-
-	private static final Vec3i[] CORNER_OFFSETS = new Vec3i[]{
-		/*new Vec3i(0, 0, 0),*/ new Vec3i(0, 0, 1), new Vec3i(0, 0, -1),
-		new Vec3i(0, 1, 0), new Vec3i(0, 1, 1), new Vec3i(0, 1, -1),
-		new Vec3i(0, -1, 0), new Vec3i(0, -1, 1), new Vec3i(0, -1, -1),
-		new Vec3i(1, 0, 0), new Vec3i(1, 0, 1), new Vec3i(1, 0, -1),
-		new Vec3i(1, 1, 0), new Vec3i(1, 1, 1), new Vec3i(1, 1, -1),
-		new Vec3i(1, -1, 0), new Vec3i(1, -1, 1), new Vec3i(1, -1, -1),
-		new Vec3i(-1, 0, 0), new Vec3i(-1, 0, 1), new Vec3i(-1, 0, -1),
-		new Vec3i(-1, 1, 0), new Vec3i(-1, 1, 1), new Vec3i(-1, 1, -1),
-		new Vec3i(-1, -1, 0), new Vec3i(-1, -1, 1), new Vec3i(-1, -1, -1),
-	};
+	private static final EnumSetProperty<Direction26> VIOLATE_DIRS = new EnumSetProperty<>("vs_violate_dirs", Direction26.class);
 
 	private static boolean ignoreBlockUpdate = false;
 
@@ -79,7 +68,11 @@ public class LevelListener {
 			return;
 		}
 		System.out.println("block updating: " + level + "@" + pos + " (" + ship + ") " + " old: " + oldState + ", new: " + newState);
-		Direction.stream()
+		if (!manager.shouldCheckConnectivity(level, pos, oldState, newState)) {
+			System.out.println("shouldn't check connectivity");
+			return;
+		}
+		Direction26.stream()
 			.forEach(dir -> {
 				boolean connectable = manager.canBlockConnect(level, pos, dir);
 				System.out.println("connectable: " + dir + ": " + connectable);
@@ -112,9 +105,5 @@ public class LevelListener {
 				}
 			}
 		}
-	}
-
-	private static Stream<BlockPos> streamOffsets(final BlockPos origin) {
-		return Stream.of(CORNER_OFFSETS).map(origin::offset);
 	}
 }
