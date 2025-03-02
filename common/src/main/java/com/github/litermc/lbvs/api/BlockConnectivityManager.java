@@ -21,6 +21,13 @@ public class BlockConnectivityManager {
 	}
 
 	public static void registerConnectivityTester(final Class<? extends Block> blockClass, final BlockConnectivityTester tester) {
+		if (connectivityTesters.containsKey(blockClass)) {
+			throw new IllegalStateException("Block " + blockClass + " is already registered");
+		}
+		connectivityTesters.put(blockClass, tester);
+	}
+
+	public static void forceRegisterConnectivityTester(final Class<? extends Block> blockClass, final BlockConnectivityTester tester) {
 		connectivityTesters.put(blockClass, tester);
 	}
 

@@ -3,7 +3,8 @@
   "package": "com.github.litermc.lbvs.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinBlockStateBase"
+    "MixinBlockStateBase",
+    "MixinSplitHandler"
   ],
   "injectors": {
     "defaultRequire": 1

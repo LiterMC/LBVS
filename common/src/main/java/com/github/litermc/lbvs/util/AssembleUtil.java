@@ -2,6 +2,7 @@ package com.github.litermc.lbvs.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
@@ -34,18 +35,18 @@ public final class AssembleUtil {
 	private static final Direction[] HORIZONTAL_DIRECTIONS = new Direction[]{
 		Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST,
 	};
-	private static final BlockPos[] CORNER_OFFSETS = new BlockPos[]{
-		/*new BlockPos(0, 0, 0),*/ new BlockPos(0, 0, 1), new BlockPos(0, 0, -1),
-		new BlockPos(0, 1, 0), new BlockPos(0, 1, 1), new BlockPos(0, 1, -1),
-		new BlockPos(0, -1, 0), new BlockPos(0, -1, 1), new BlockPos(0, -1, -1),
-		new BlockPos(1, 0, 0), new BlockPos(1, 0, 1), new BlockPos(1, 0, -1),
-		new BlockPos(1, 1, 0), new BlockPos(1, 1, 1), new BlockPos(1, 1, -1),
-		new BlockPos(1, -1, 0), new BlockPos(1, -1, 1), new BlockPos(1, -1, -1),
-		new BlockPos(-1, 0, 0), new BlockPos(-1, 0, 1), new BlockPos(-1, 0, -1),
-		new BlockPos(-1, 1, 0), new BlockPos(-1, 1, 1), new BlockPos(-1, 1, -1),
-		new BlockPos(-1, -1, 0), new BlockPos(-1, -1, 1), new BlockPos(-1, -1, -1),
+	private static final Vec3i[] CORNER_OFFSETS = new Vec3i[]{
+		/*new Vec3i(0, 0, 0),*/ new Vec3i(0, 0, 1), new Vec3i(0, 0, -1),
+		new Vec3i(0, 1, 0), new Vec3i(0, 1, 1), new Vec3i(0, 1, -1),
+		new Vec3i(0, -1, 0), new Vec3i(0, -1, 1), new Vec3i(0, -1, -1),
+		new Vec3i(1, 0, 0), new Vec3i(1, 0, 1), new Vec3i(1, 0, -1),
+		new Vec3i(1, 1, 0), new Vec3i(1, 1, 1), new Vec3i(1, 1, -1),
+		new Vec3i(1, -1, 0), new Vec3i(1, -1, 1), new Vec3i(1, -1, -1),
+		new Vec3i(-1, 0, 0), new Vec3i(-1, 0, 1), new Vec3i(-1, 0, -1),
+		new Vec3i(-1, 1, 0), new Vec3i(-1, 1, 1), new Vec3i(-1, 1, -1),
+		new Vec3i(-1, -1, 0), new Vec3i(-1, -1, 1), new Vec3i(-1, -1, -1),
 	};
-	private static final BlockPos[] NO_DOWN_CORNER_OFFSETS = Stream.of(CORNER_OFFSETS).filter(p -> p.getY() >= 0).toArray(BlockPos[]::new);
+	private static final Vec3i[] NO_DOWN_CORNER_OFFSETS = Stream.of(CORNER_OFFSETS).filter(p -> p.getY() >= 0).toArray(Vec3i[]::new);
 
 	public static void assembleTree(final ServerLevel level, final BlockPos pos, final BlockState original) {
 		final List<BlockPos> blocks = findTreeBlocks(level, pos, original.getBlock());
