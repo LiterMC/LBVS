@@ -27,17 +27,17 @@ public class BlockTester implements BlockConnectivityTester {
 	}
 
 	@Override
-	public Boolean canBlockConnect(final ServerLevel level, final BlockState state, final BlockPos pos, final Direction26 dir) {
+	public Boolean canBlockConnect(final ServerLevel level, final BlockState state, final BlockPos anchor, final Direction26 dir) {
 		if (state.isAir()) {
 			return false;
 		}
-		BlockPos otherPos = dir.offsetOf(pos);
+		BlockPos otherPos = dir.offsetOf(anchor);
 		BlockState other = level.getBlockState(otherPos);
 		if (other.isAir()) {
 			return false;
 		}
 		return Shapes.joinIsNotEmpty(
-			state.getShape(level, pos),
+			state.getShape(level, anchor),
 			other.getShape(level, otherPos).move(dir.getStepX() * OFFSET_SCALE, dir.getStepY() * OFFSET_SCALE, dir.getStepZ() * OFFSET_SCALE),
 			BooleanOp.AND
 		);
