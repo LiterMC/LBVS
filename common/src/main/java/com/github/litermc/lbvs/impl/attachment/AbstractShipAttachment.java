@@ -10,6 +10,7 @@ import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.apigame.world.ServerShipWorldCore;
 import org.valkyrienskies.core.impl.game.ships.ShipObject;
 import org.valkyrienskies.mod.common.IShipObjectWorldServerProvider;
+import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import com.github.litermc.lbvs.platform.PlatformHelper;
 
@@ -46,7 +47,7 @@ public abstract class AbstractShipAttachment {
 		final ServerShipWorldCore core = ((IShipObjectWorldServerProvider)(server)).getShipObjectWorld();
 		this.ship = core.getAllShips().getById(this.shipId);
 		if (this.ship != null) {
-			final String levelId = ((ShipObject)(this.ship)).getChunkClaimDimension();
+			final String levelId = this.getShipDimensionId();
 			this.level = PlatformHelper.getLevelByVSDimension(server, levelId);
 			this.inited = true;
 			this.afterInit();
@@ -55,8 +56,17 @@ public abstract class AbstractShipAttachment {
 		return false;
 	}
 
+	private String getShipDimensionId() {
+		return ((ShipObject)(this.ship)).getChunkClaimDimension();
+	}
+
 	public final ServerLevel getLevel() {
-		this.tryInit();
+		if (this.tryInit()) {
+			final String levelId = this.getShipDimensionId();
+			if (!levelId.equals(VSGameUtilsKt.getDimensionId(this.level))) {
+				this.level = PlatformHelper.getLevelByVSDimension(PlatformHelper.getMinecraftServer(), levelId);
+			}
+		}
 		return this.level;
 	}
 
