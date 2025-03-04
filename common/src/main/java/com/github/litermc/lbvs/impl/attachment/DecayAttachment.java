@@ -1,5 +1,7 @@
 package com.github.litermc.lbvs.impl.attachment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
@@ -7,18 +9,21 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.ServerTickListener;
+import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
+import com.github.litermc.lbvs.api.attachment.ISplitListener;
 import com.github.litermc.lbvs.util.Ref;
 import com.github.litermc.lbvs.util.ShipRandomTickGenerator;
 
 import com.google.common.collect.ImmutableMap;
 
-public final class DecayAttachment implements ServerTickListener {
+public final class DecayAttachment extends AbstractShipAttachment implements ServerTickListener, ISplitListener {
 	public static final String DECAY_PREFIX = "+decay+";
-
 	private static final ImmutableMap<Block, Block> STAGED = new ImmutableMap.Builder<Block, Block>()
 		.put(Blocks.ACACIA_LOG, Blocks.STRIPPED_ACACIA_LOG)
 		.put(Blocks.BIRCH_LOG, Blocks.STRIPPED_BIRCH_LOG)
@@ -33,44 +38,51 @@ public final class DecayAttachment implements ServerTickListener {
 		.build();
 
 	private final int decayRate = 5;
+	@JsonProperty("forceDecayCounter")
 	private int forceDecayCounter;
-	private transient ServerLevel level;
-	private transient ServerShip ship;
+	@JsonIgnore
 	private transient ShipRandomTickGenerator rnd;
 
-	public DecayAttachment() {
-		this(null, null);
+	private DecayAttachment() {
+		super();
+		this.forceDecayCounter = 0;
 	}
 
-	public DecayAttachment(ServerLevel level, ServerShip ship) {
-		this.forceDecayCounter = 20 * 60 * 10; // 10 min
-		this.setShip(level, ship);
+	public DecayAttachment(ServerLevel level, ServerShip ship, int forceDecayCounter) {
+		super(level, ship);
+		this.forceDecayCounter = forceDecayCounter;
+		this.rnd = new ShipRandomTickGenerator(level, ship, this.decayRate, DecayAttachment::onRandomTick);
 	}
 
-	public void setShip(ServerLevel level, ServerShip ship) {
-		this.level = level;
-		this.ship = ship;
-		this.rnd = ship == null ? null : new ShipRandomTickGenerator(level, ship, this.decayRate, DecayAttachment::onRandomTick);
+	@Override
+	protected void afterInit() {
+		this.rnd = new ShipRandomTickGenerator(this.getLevel(), this.getShip(), this.decayRate, DecayAttachment::onRandomTick);
 	}
 
 	@Override
 	public void onServerTick() {
-		ServerShip ship = this.ship;
+		final ServerLevel level = this.getLevel();
+		final ServerShip ship = this.getShip();
 		if (ship == null) {
 			return;
 		}
-		String slug = ship.getSlug();
+		final String slug = ship.getSlug();
 		if (slug == null || !slug.startsWith(DECAY_PREFIX)) {
 			ship.saveAttachment(this.getClass(), null);
 			return;
 		}
 		this.forceDecayCounter--;
-		if (this.forceDecayCounter <= 0) {
+		if (this.forceDecayCounter < 0) {
 			ship.saveAttachment(this.getClass(), null);
-			VSGameUtilsKt.getShipObjectWorld(this.level).deleteShip(ship);
+			VSGameUtilsKt.getShipObjectWorld(level).deleteShip(ship);
 			return;
 		}
 		this.rnd.tick();
+	}
+
+	@Override
+	public void onServerShipSplit(ServerShip oldShip, ServerShip newShip) {
+		newShip.saveAttachment(DecayAttachment.class, new DecayAttachment(this.getLevel(), newShip, this.forceDecayCounter));
 	}
 
 	private static void onRandomTick(ServerLevel level, ServerShip ship, BlockPos pos, BlockState state) {

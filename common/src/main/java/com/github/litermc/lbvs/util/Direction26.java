@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 
+import java.util.EnumSet;
 import java.util.stream.Stream;
 
 public enum Direction26 {
@@ -117,6 +118,10 @@ public enum Direction26 {
 
 	public static Stream<BlockPos> streamOffsetsOfWith(BlockPos origin, Pos pos) {
 		return streamWith(pos).map(d -> d.offsetOf(origin));
+	}
+
+	public static EnumSet<Direction26> createEmptySet() {
+		return EnumSet.noneOf(Direction26.class);
 	}
 
 	public static enum Pos {

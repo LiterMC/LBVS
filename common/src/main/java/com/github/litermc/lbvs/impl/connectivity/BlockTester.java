@@ -27,7 +27,7 @@ public class BlockTester implements BlockConnectivityTester {
 	}
 
 	@Override
-	public Boolean canBlockConnect(final ServerLevel level, final BlockState state, final BlockPos anchor, final Direction26 dir) {
+	public Boolean canAnchor(final ServerLevel level, final BlockState state, final BlockPos anchor, final Direction26 dir) {
 		if (state.isAir()) {
 			return false;
 		}

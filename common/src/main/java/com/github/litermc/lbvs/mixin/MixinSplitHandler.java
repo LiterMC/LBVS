@@ -12,13 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SplitHandler.class)
 public class MixinSplitHandler {
-	// @Inject(method = "split", at = @At("HEAD"), cancellable = true)
-	// private void split(
-	// 		final Level level,
-	// 		final int x, final int y, final int z,
-	// 		final BlockState oldState,
-	// 		final BlockState newState,
-	// 		final CallbackInfo ci) {
-	// 	ci.cancel();
-	// }
+	@Inject(method = "split", at = @At("HEAD"), cancellable = true)
+	private void split(
+			final Level level,
+			final int x, final int y, final int z,
+			final BlockState oldState,
+			final BlockState newState,
+			final CallbackInfo ci) {
+		ci.cancel();
+	}
 }

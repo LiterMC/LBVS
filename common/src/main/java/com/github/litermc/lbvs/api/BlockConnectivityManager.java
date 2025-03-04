@@ -53,7 +53,7 @@ public class BlockConnectivityManager {
 		return true;
 	}
 
-	public boolean canBlockConnect(final ServerLevel level, final BlockPos pos, final Direction26 dir) {
+	public boolean canAnchor(final ServerLevel level, final BlockPos pos, final Direction26 dir) {
 		final BlockState state = level.getBlockState(pos);
 		final Block block = state.getBlock();
 		for (Class<?> blockClass = block.getClass();
@@ -61,7 +61,7 @@ public class BlockConnectivityManager {
 				blockClass = blockClass.getSuperclass()) {
 			final BlockConnectivityTester tester = connectivityTesters.get(blockClass);
 			if (tester != null) {
-				final Boolean res = tester.canBlockConnect(level, state, pos, dir);
+				final Boolean res = tester.canAnchor(level, state, pos, dir);
 				if (res != null) {
 					return res;
 				}

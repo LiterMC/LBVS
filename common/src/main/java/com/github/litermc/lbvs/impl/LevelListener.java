@@ -17,13 +17,12 @@ import org.valkyrienskies.mod.common.util.SplittingDisablerAttachment;
 import com.github.litermc.lbvs.api.BlockConnectivityManager;
 import com.github.litermc.lbvs.util.AssembleUtil;
 import com.github.litermc.lbvs.util.Direction26;
-import com.github.litermc.lbvs.util.EnumSetProperty;
 
+import java.util.EnumSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LevelListener {
-	private static final EnumSetProperty<Direction26> VIOLATE_DIRS = new EnumSetProperty<>("vs_violate_dirs", Direction26.class);
-
 	private static boolean ignoreBlockUpdate = false;
 
 	public static void onBlockUpdated(
@@ -36,10 +35,10 @@ public class LevelListener {
 		ignoreBlockUpdate = true;
 		try {
 			ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(level, pos);
-			if (ship == null) {
-				onWorldBlockUpdated(level, pos, oldState, newState, moving);
-			} else {
+			if (ship != null) {
 				onShipBlockUpdated(level, pos, ship, oldState, newState, moving);
+			} else {
+				onWorldBlockUpdated(level, pos, oldState, newState, moving);
 			}
 		} finally {
 			ignoreBlockUpdate = false;
@@ -56,27 +55,28 @@ public class LevelListener {
 			}
 			onWorldBlockRemoved(level, pos, oldState, moving);
 		}
+		return;
 	}
 
 	private static void onShipBlockUpdated(
 			final ServerLevel level, final BlockPos pos, final ServerShip ship,
-			final BlockState oldState, final BlockState newState,
+			final BlockState oldState, BlockState newState,
 			final boolean moving) {
-		BlockConnectivityManager manager = BlockConnectivityManager.getInstance();
-		SplittingDisablerAttachment splitDisablerAttachment = ship.getAttachment(SplittingDisablerAttachment.class);
+		final BlockConnectivityManager manager = BlockConnectivityManager.getInstance();
+		final SplittingDisablerAttachment splitDisablerAttachment = ship.getAttachment(SplittingDisablerAttachment.class);
 		if (splitDisablerAttachment != null && !splitDisablerAttachment.canSplit()) {
 			return;
 		}
 		System.out.println("block updating: " + level + "@" + pos + " (" + ship + ") " + " old: " + oldState + ", new: " + newState);
-		if (!manager.shouldCheckConnectivity(level, pos, oldState, newState)) {
-			System.out.println("shouldn't check connectivity");
-			return;
+		final EnumSet<Direction26> anchables;
+		if (manager.shouldCheckConnectivity(level, pos, oldState, newState)) {
+			anchables = Direction26.stream()
+				.filter(dir -> manager.canAnchor(level, pos, dir))
+				.collect(Collectors.toCollection(Direction26::createEmptySet));
+		} else {
+			anchables = null;
 		}
-		Direction26.stream()
-			.forEach(dir -> {
-				boolean connectable = manager.canBlockConnect(level, pos, dir);
-				System.out.println("connectable: " + dir + ": " + connectable);
-			});
+		System.out.println("anchables: " + anchables);
 	}
 
 	private static void onWorldBlockRemoved(

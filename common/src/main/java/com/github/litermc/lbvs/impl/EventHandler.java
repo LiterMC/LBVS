@@ -7,7 +7,8 @@ import com.github.litermc.lbvs.impl.attachment.DecayAttachment;
 
 public final class EventHandler {
 	public static void onTreeAssembled(final ServerLevel level, final ServerShip ship) {
+		final int DEFAULT_FORCE_DECAY_TIMEOUT = 20 * 60 * 10; // 10 min
 		ship.setSlug(DecayAttachment.DECAY_PREFIX + "tree-" + System.identityHashCode(ship));
-		ship.saveAttachment(DecayAttachment.class, new DecayAttachment(level, ship));
+		ship.saveAttachment(DecayAttachment.class, new DecayAttachment(level, ship, DEFAULT_FORCE_DECAY_TIMEOUT));
 	}
 }

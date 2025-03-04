@@ -23,7 +23,7 @@ public interface BlockConnectivityTester {
 	Boolean shouldCheckConnectivity(ServerLevel level, BlockPos pos, BlockState oldState, BlockState newState);
 
 	/**
-	 * test if the block can connect to given direction.
+	 * test if the given direction can anchor to the block.
 	 *
 	 * @param level  the level the block is in
 	 * @param state  the {@link BlockState}
@@ -34,5 +34,5 @@ public interface BlockConnectivityTester {
 	 *     {@link Boolean.FALSE} if cannot connect,
 	 *     or {@code null} if unknown (which means need to pass to parent tester).
 	 */
-	Boolean canBlockConnect(ServerLevel level, BlockState state, BlockPos anchor, Direction26 dir);
+	Boolean canAnchor(ServerLevel level, BlockState state, BlockPos anchor, Direction26 dir);
 }
