@@ -46,7 +46,7 @@ public final class DecayAttachment extends AbstractShipAttachment implements Ser
 		this.forceDecayCounter = 0;
 	}
 
-	public DecayAttachment(ServerLevel level, ServerShip ship, int forceDecayCounter) {
+	public DecayAttachment(final ServerLevel level, final ServerShip ship, final int forceDecayCounter) {
 		super(level, ship);
 		this.forceDecayCounter = forceDecayCounter;
 		this.rnd = new ShipRandomTickGenerator(level, ship, this.decayRate, DecayAttachment::onRandomTick);
@@ -79,19 +79,19 @@ public final class DecayAttachment extends AbstractShipAttachment implements Ser
 	}
 
 	@Override
-	public void onAfterShipSplit(ServerShip oldShip, ServerShip newShip) {
+	public void onAfterShipSplit(final ServerShip oldShip, final ServerShip newShip) {
 		newShip.saveAttachment(DecayAttachment.class, new DecayAttachment(this.getLevel(), newShip, this.forceDecayCounter));
 	}
 
-	private static void onRandomTick(ServerLevel level, ServerShip ship, BlockPos pos, BlockState state) {
+	private static void onRandomTick(final ServerLevel level, final ServerShip ship, final BlockPos pos, final BlockState state) {
 		if (!state.isAir()) {
 			destroyBlock(level, ship, pos);
 		}
 	}
 
-	private static void destroyBlock(ServerLevel level, ServerShip ship, BlockPos pos) {
-		BlockState state = level.getBlockState(pos);
-		Block decayedBlock = STAGED.get(state.getBlock());
+	private static void destroyBlock(final ServerLevel level, final ServerShip ship, final BlockPos pos) {
+		final BlockState state = level.getBlockState(pos);
+		final Block decayedBlock = STAGED.get(state.getBlock());
 		if (decayedBlock != null) {
 			final Ref<BlockState> newState = new Ref<>(decayedBlock.defaultBlockState());
 			state.getValues().forEach((k, v) -> {
@@ -103,7 +103,8 @@ public final class DecayAttachment extends AbstractShipAttachment implements Ser
 		level.destroyBlock(pos, true);
 	}
 
-	private static <T extends Comparable<T>> BlockState trySetValue(BlockState state, Property<T> property, Object value) {
+	private static <T extends Comparable<T>> BlockState trySetValue(
+			final BlockState state, final Property<T> property, final Object value) {
 		return state.trySetValue(property, (T) value);
 	}
 }

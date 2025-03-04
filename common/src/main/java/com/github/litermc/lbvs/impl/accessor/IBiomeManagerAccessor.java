@@ -6,6 +6,6 @@ public interface IBiomeManagerAccessor {
 	long getBiomeZoomSeed();
 
 	static long getBiomeZoomSeedFrom(BiomeManager manager) {
-		return ((IBiomeManagerAccessor)((Object)(manager))).getBiomeZoomSeed();
+		return ((IBiomeManagerAccessor) ((Object) (manager))).getBiomeZoomSeed();
 	}
 }

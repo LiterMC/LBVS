@@ -10,7 +10,7 @@ import java.util.stream.StreamSupport;
 public final class PlatformHelper {
 	private PlatformHelper() {}
 
-	public static boolean isModLoaded(String modId) {
+	public static boolean isModLoaded(final String modId) {
 		return LBVSServices.PLATFORM.isModLoaded(modId);
 	}
 
@@ -18,7 +18,7 @@ public final class PlatformHelper {
 		return LBVSServices.PLATFORM.getMinecraftServer();
 	}
 
-	public static ServerLevel getLevelByVSDimension(MinecraftServer server, String id) {
+	public static ServerLevel getLevelByVSDimension(final MinecraftServer server, final String id) {
 		return StreamSupport.stream(server.getAllLevels().spliterator(), false)
 			.filter(lvl -> id.equals(VSGameUtilsKt.getDimensionId(lvl)))
 			.findFirst()

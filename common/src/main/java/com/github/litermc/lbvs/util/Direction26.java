@@ -84,7 +84,7 @@ public enum Direction26 {
 		return this.offset.getZ();
 	}
 
-	public BlockPos offsetOf(BlockPos origin) {
+	public BlockPos offsetOf(final BlockPos origin) {
 		return origin.offset(this.offset);
 	}
 
@@ -96,7 +96,7 @@ public enum Direction26 {
 		return stream().map(Direction26::offset);
 	}
 
-	public static Stream<Direction26> streamWith(Pos pos) {
+	public static Stream<Direction26> streamWith(final Pos pos) {
 		return stream().filter(d -> d.pos() == pos);
 	}
 
@@ -112,11 +112,11 @@ public enum Direction26 {
 		return streamWith(Pos.CORNER);
 	}
 
-	public static Stream<BlockPos> streamAllOffsetsOf(BlockPos origin) {
+	public static Stream<BlockPos> streamAllOffsetsOf(final BlockPos origin) {
 		return stream().map(d -> d.offsetOf(origin));
 	}
 
-	public static Stream<BlockPos> streamOffsetsOfWith(BlockPos origin, Pos pos) {
+	public static Stream<BlockPos> streamOffsetsOfWith(final BlockPos origin, final Pos pos) {
 		return streamWith(pos).map(d -> d.offsetOf(origin));
 	}
 

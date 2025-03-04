@@ -14,20 +14,24 @@ import com.github.litermc.lbvs.impl.accessor.IBiomeManagerAccessor;
 public class WrappedBiomeManager extends BiomeManager {
 	private final Level level;
 
-	public WrappedBiomeManager(Level level, BiomeManager.NoiseBiomeSource source, long seed) {
+	public WrappedBiomeManager(final Level level, final BiomeManager.NoiseBiomeSource source, final long seed) {
 		super(source, seed);
 		this.level = level;
 	}
 
 	@Override
-	public BiomeManager withDifferentSource(BiomeManager.NoiseBiomeSource source) {
-		return new WrappedBiomeManager(source instanceof Level level ? level : this.level, source, IBiomeManagerAccessor.getBiomeZoomSeedFrom(this));
+	public BiomeManager withDifferentSource(final BiomeManager.NoiseBiomeSource source) {
+		return new WrappedBiomeManager(
+			source instanceof Level level ? level : this.level,
+			source,
+			IBiomeManagerAccessor.getBiomeZoomSeedFrom(this)
+		);
 	}
 
 	@Override
-	public Holder<Biome> getBiome(BlockPos pos) {
-		Vec3 worldPos = VSGameUtilsKt.toWorldCoordinates(this.level, Vec3.atCenterOf(pos));
-		BlockPos blockPos = BlockPos.containing(worldPos);
+	public Holder<Biome> getBiome(final BlockPos pos) {
+		final Vec3 worldPos = VSGameUtilsKt.toWorldCoordinates(this.level, Vec3.atCenterOf(pos));
+		final BlockPos blockPos = BlockPos.containing(worldPos);
 		return super.getBiome(blockPos);
 	}
 }

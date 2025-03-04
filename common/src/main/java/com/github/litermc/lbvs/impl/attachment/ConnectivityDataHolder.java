@@ -26,7 +26,10 @@ import java.util.function.Consumer;
 public final class ConnectivityDataHolder implements ISplitListener {
 	private final Long2ObjectOpenHashMap<EnumSet<Direction26>> anchables = new Long2ObjectOpenHashMap<>();
 
-	public void onBeforeShipSplit(ServerShip oldShip, List<BlockPos> splitting, Consumer<Consumer<ServerShip>> listener) {
+	public void onBeforeShipSplit(
+			final ServerShip oldShip,
+			final List<BlockPos> splitting,
+			final Consumer<Consumer<ServerShip>> listener) {
 		listener.accept((newShip) -> {
 			//
 		});
@@ -36,7 +39,7 @@ public final class ConnectivityDataHolder implements ISplitListener {
 		return this.anchables.computeIfAbsent(pos.asLong(), (p) -> EnumSet.noneOf(Direction26.class));
 	}
 
-	public void setAnchables(final BlockPos pos, EnumSet<Direction26> set) {
+	public void setAnchables(final BlockPos pos, final EnumSet<Direction26> set) {
 		this.anchables.put(pos.asLong(), set);
 	}
 

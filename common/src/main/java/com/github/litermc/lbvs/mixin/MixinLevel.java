@@ -18,7 +18,7 @@ public class MixinLevel {
 		at = @At(value = "NEW", target = "Lnet/minecraft/world/level/biome/BiomeManager;")
 	)
 	private BiomeManager newBiomeManager(final BiomeManager biomeManager) {
-		final Level thisLevel = (Level)((Object)(this));
+		final Level thisLevel = (Level) ((Object) (this));
 		return new WrappedBiomeManager(thisLevel, thisLevel, IBiomeManagerAccessor.getBiomeZoomSeedFrom(biomeManager));
 	}
 }

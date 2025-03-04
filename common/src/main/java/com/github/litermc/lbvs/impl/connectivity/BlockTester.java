@@ -31,8 +31,8 @@ public class BlockTester implements BlockConnectivityTester {
 		if (state.isAir()) {
 			return false;
 		}
-		BlockPos otherPos = dir.offsetOf(anchor);
-		BlockState other = level.getBlockState(otherPos);
+		final BlockPos otherPos = dir.offsetOf(anchor);
+		final BlockState other = level.getBlockState(otherPos);
 		if (other.isAir()) {
 			return false;
 		}

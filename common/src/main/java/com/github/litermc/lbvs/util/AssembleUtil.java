@@ -43,7 +43,7 @@ public final class AssembleUtil {
 		if (blocks.size() == 0) {
 			return null;
 		}
-		DenseBlockPosSet blockSet = new DenseBlockPosSet();
+		final DenseBlockPosSet blockSet = new DenseBlockPosSet();
 		blocks.forEach(p -> {
 			blockSet.add(p.getX(), p.getY(), p.getZ());
 		});
@@ -62,7 +62,7 @@ public final class AssembleUtil {
 			.peek(accessed::add)
 			.map(p -> new Pair(p, 0))
 			.forEach(queue::add);
-		for (BlockPos logPos : blocks) {
+		for (final BlockPos logPos : blocks) {
 			Stream.of(NO_DOWN_DIRECTIONS)
 				.map(logPos::relative)
 				.filter(Predicate.not(accessed::contains))
@@ -71,17 +71,17 @@ public final class AssembleUtil {
 				.forEach(queue::add);
 		}
 		while (!queue.isEmpty()) {
-			Pair<BlockPos, Integer> pair = queue.remove();
-			BlockPos p = pair.left();
-			int dist = pair.right() + 1;
-			BlockState st = level.getBlockState(p);
+			final Pair<BlockPos, Integer> pair = queue.remove();
+			final BlockPos p = pair.left();
+			final int dist = pair.right() + 1;
+			final BlockState st = level.getBlockState(p);
 			if (!st.is(BlockTags.LEAVES) || st.getOptionalValue(LeavesBlock.PERSISTENT).orElse(true)) {
 				continue;
 			}
 			if (dist > st.getOptionalValue(LeavesBlock.DISTANCE).orElse(0)) {
 				continue;
 			}
-			boolean invalid = Direction.stream()
+			final boolean invalid = Direction.stream()
 				.map(p::relative)
 				.filter(Predicate.not(logs::contains))
 				.map(level::getBlockState)
@@ -108,8 +108,8 @@ public final class AssembleUtil {
 		final Deque<BlockPos> deque = new ArrayDeque<>();
 		deque.addLast(pos.above());
 		while (!deque.isEmpty()) {
-			BlockPos p = deque.removeLast();
-			BlockState st = level.getBlockState(p);
+			final BlockPos p = deque.removeLast();
+			final BlockState st = level.getBlockState(p);
 			if (st.getBlock() != block) {
 				continue;
 			}

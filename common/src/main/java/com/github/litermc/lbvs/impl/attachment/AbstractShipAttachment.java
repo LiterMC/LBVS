@@ -30,7 +30,7 @@ public abstract class AbstractShipAttachment {
 		this.ship = null;
 	}
 
-	public AbstractShipAttachment(ServerLevel level, ServerShip ship) {
+	public AbstractShipAttachment(final ServerLevel level, final ServerShip ship) {
 		this.level = level;
 		this.ship = ship;
 		this.shipId = ship.getId();
@@ -44,7 +44,7 @@ public abstract class AbstractShipAttachment {
 			return true;
 		}
 		final MinecraftServer server = PlatformHelper.getMinecraftServer();
-		final ServerShipWorldCore core = ((IShipObjectWorldServerProvider)(server)).getShipObjectWorld();
+		final ServerShipWorldCore core = ((IShipObjectWorldServerProvider) (server)).getShipObjectWorld();
 		this.ship = core.getAllShips().getById(this.shipId);
 		if (this.ship != null) {
 			final String levelId = this.getShipDimensionId();
@@ -57,7 +57,7 @@ public abstract class AbstractShipAttachment {
 	}
 
 	private String getShipDimensionId() {
-		return ((ShipObject)(this.ship)).getChunkClaimDimension();
+		return ((ShipObject) (this.ship)).getChunkClaimDimension();
 	}
 
 	public final ServerLevel getLevel() {

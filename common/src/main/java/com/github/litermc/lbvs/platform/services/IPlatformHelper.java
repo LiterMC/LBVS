@@ -13,7 +13,7 @@ public interface IPlatformHelper {
 
 	/**
 	 * Get global {@link MinecraftServer} instance
-	 * 
+	 *
 	 * @return The global {@link MinecraftServer} instance, {@code null} if the environment does not contain a server.
 	 */
 	MinecraftServer getMinecraftServer();

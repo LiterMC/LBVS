@@ -35,7 +35,7 @@ public class LevelListener {
 		}
 		ignoreBlockUpdate = true;
 		try {
-			ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(level, pos);
+			final ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(level, pos);
 			if (ship != null) {
 				onShipBlockUpdated(level, pos, ship, oldState, newState, moving);
 			} else {
@@ -61,7 +61,7 @@ public class LevelListener {
 
 	private static void onShipBlockUpdated(
 			final ServerLevel level, final BlockPos pos, final ServerShip ship,
-			final BlockState oldState, BlockState newState,
+			final BlockState oldState, final BlockState newState,
 			final boolean moving) {
 		final BlockConnectivityManager manager = BlockConnectivityManager.getInstance();
 		final SplittingDisablerAttachment splitDisablerAttachment = ship.getAttachment(SplittingDisablerAttachment.class);
@@ -91,14 +91,14 @@ public class LevelListener {
 			if (oldState.getOptionalValue(RotatedPillarBlock.AXIS).map(axis -> axis != Direction.Axis.Y).orElse(true) || moving) {
 				return;
 			}
-			BlockPos.MutableBlockPos leafPos = pos.mutable();
-			int maxY = Math.min(pos.getY() + 32, level.getMaxBuildHeight());
+			final BlockPos.MutableBlockPos leafPos = pos.mutable();
+			final int maxY = Math.min(pos.getY() + 32, level.getMaxBuildHeight());
 			for (int y = pos.getY() + 1; y <= maxY; y++) {
 				leafPos.setY(y);
-				BlockState st = level.getBlockState(leafPos);
+				final BlockState st = level.getBlockState(leafPos);
 				if (st.is(BlockTags.LEAVES)) {
 					if (!st.getOptionalValue(LeavesBlock.PERSISTENT).orElse(true)) {
-						ServerShip ship = AssembleUtil.assembleTree(level, pos, oldState);
+						final ServerShip ship = AssembleUtil.assembleTree(level, pos, oldState);
 						if (ship != null) {
 							EventHandler.onTreeAssembled(level, ship);
 						}

@@ -18,10 +18,9 @@
 
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
-
     <property name="severity" value="error"/>
-
     <property name="fileExtensions" value="java, properties, xml"/>
+    <property name="tabWidth" value="1"/>
 
     <!-- VS CUSTOM RULES -->
     <module name="NewlineAtEndOfFile"/>
@@ -142,7 +141,7 @@
                      value="WhitespaceAround: ''{0}'' is not preceded with whitespace."/>
         </module>
         <module name="OneStatementPerLine"/>
-        <module name="MultipleVariableDeclarations"/>
+        <!-- <module name="MultipleVariableDeclarations"/> -->
         <module name="ArrayTypeStyle"/>
         <module name="MissingSwitchDefault"/>
         <module name="FallThrough"/>
@@ -260,13 +259,13 @@
                      value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
         </module>
         <module name="Indentation">
-            <!-- tab are considered 8 char wide -->
-            <property name="basicOffset" value="8"/>
-            <property name="braceAdjustment" value="8"/>
-            <property name="caseIndent" value="8"/>
-            <property name="throwsIndent" value="8"/>
-            <property name="lineWrappingIndentation" value="8"/>
-            <property name="arrayInitIndent" value="8"/>
+            <!-- tab are considered 1 char wide -->
+            <property name="basicOffset" value="1"/>
+            <property name="braceAdjustment" value="1"/>
+            <property name="caseIndent" value="1"/>
+            <property name="throwsIndent" value="1"/>
+            <property name="lineWrappingIndentation" value="1"/>
+            <property name="arrayInitIndent" value="1"/>
         </module>
         <!-- <module name="CustomImportOrder">
             <property name="sortImportsInGroupAlphabetically" value="true"/>
