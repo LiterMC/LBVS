@@ -15,6 +15,7 @@ import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import org.valkyrienskies.mod.common.util.SplittingDisablerAttachment;
 
 import com.github.litermc.lbvs.api.BlockConnectivityManager;
+import com.github.litermc.lbvs.impl.attachment.ConnectivityDataHolder;
 import com.github.litermc.lbvs.util.AssembleUtil;
 import com.github.litermc.lbvs.util.Direction26;
 
@@ -68,13 +69,17 @@ public class LevelListener {
 			return;
 		}
 		System.out.println("block updating: " + level + "@" + pos + " (" + ship + ") " + " old: " + oldState + ", new: " + newState);
-		final EnumSet<Direction26> anchables;
+		ConnectivityDataHolder holder = ship.getAttachment(ConnectivityDataHolder.class);
+		if (holder == null) {
+			holder = new ConnectivityDataHolder();
+			ship.saveAttachment(ConnectivityDataHolder.class, holder);
+		}
+		final EnumSet<Direction26> anchables = holder.getAnchables(pos);
 		if (manager.shouldCheckConnectivity(level, pos, oldState, newState)) {
-			anchables = Direction26.stream()
+			anchables.clear();
+			Direction26.stream()
 				.filter(dir -> manager.canAnchor(level, pos, dir))
-				.collect(Collectors.toCollection(Direction26::createEmptySet));
-		} else {
-			anchables = null;
+				.forEach(anchables::add);
 		}
 		System.out.println("anchables: " + anchables);
 	}

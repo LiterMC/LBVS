@@ -1,6 +1,7 @@
 package com.github.litermc.lbvs.impl.attachment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -9,11 +10,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.ServerTickListener;
-import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import com.github.litermc.lbvs.api.attachment.ISplitListener;
@@ -81,7 +79,7 @@ public final class DecayAttachment extends AbstractShipAttachment implements Ser
 	}
 
 	@Override
-	public void onServerShipSplit(ServerShip oldShip, ServerShip newShip) {
+	public void onAfterShipSplit(ServerShip oldShip, ServerShip newShip) {
 		newShip.saveAttachment(DecayAttachment.class, new DecayAttachment(this.getLevel(), newShip, this.forceDecayCounter));
 	}
 

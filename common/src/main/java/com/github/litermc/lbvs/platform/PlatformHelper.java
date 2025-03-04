@@ -1,6 +1,11 @@
 package com.github.litermc.lbvs.platform;
 
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+
+import org.valkyrienskies.mod.common.VSGameUtilsKt;
+
+import java.util.stream.StreamSupport;
 
 public final class PlatformHelper {
 	private PlatformHelper() {}
@@ -12,4 +17,11 @@ public final class PlatformHelper {
 	public static MinecraftServer getMinecraftServer() {
 		return LBVSServices.PLATFORM.getMinecraftServer();
 	}
-} 
+
+	public static ServerLevel getLevelByVSDimension(MinecraftServer server, String id) {
+		return StreamSupport.stream(server.getAllLevels().spliterator(), false)
+			.filter(lvl -> id.equals(VSGameUtilsKt.getDimensionId(lvl)))
+			.findFirst()
+			.orElse(null);
+	}
+}
