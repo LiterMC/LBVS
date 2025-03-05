@@ -71,17 +71,36 @@ public class LevelListener {
 		System.out.println("block updating: " + level + "@" + pos + " (" + ship + ") " + " old: " + oldState + ", new: " + newState);
 		ConnectivityDataHolder holder = ship.getAttachment(ConnectivityDataHolder.class);
 		if (holder == null) {
-			holder = new ConnectivityDataHolder();
+			holder = new ConnectivityDataHolder(level, ship);
 			ship.saveAttachment(ConnectivityDataHolder.class, holder);
+			holder.onShipCreated(level, ship);
 		}
-		final EnumSet<Direction26> anchables = holder.getAnchables(pos);
-		if (manager.shouldCheckConnectivity(level, pos, oldState, newState)) {
-			anchables.clear();
-			Direction26.stream()
-				.filter(dir -> manager.canAnchor(level, pos, dir))
-				.forEach(anchables::add);
+		final EnumSet<Direction26> lastAnchables = holder.getAnchables(pos);
+		if (!manager.shouldCheckConnectivity(level, pos, oldState, newState)) {
+			return;
 		}
-		System.out.println("anchables: " + anchables);
+		final EnumSet<Direction26> removedAnchables = EnumSet.noneOf(Direction26.class);
+		final EnumSet<Direction26> addedAnchables = EnumSet.noneOf(Direction26.class);
+		if (newState.isAir()) {
+			removedAnchables.addAll(lastAnchables);
+			lastAnchables.clear();
+		} else {
+			for (final Direction26 dir : Direction26.values()) {
+				final boolean had = lastAnchables.contains(dir);
+				if (manager.canAnchor(level, pos, dir)) {
+					if (!had) {
+						lastAnchables.add(dir);
+						addedAnchables.add(dir);
+					}
+				} else if (had) {
+					lastAnchables.remove(dir);
+					removedAnchables.add(dir);
+				}
+			}
+		}
+		System.out.println("at " + pos);
+		System.out.println(" addedAnchables: " + addedAnchables);
+		System.out.println(" removedAnchables: " + removedAnchables);
 	}
 
 	private static void onWorldBlockRemoved(

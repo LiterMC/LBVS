@@ -20,7 +20,7 @@ import com.github.litermc.lbvs.util.ShipRandomTickGenerator;
 
 import com.google.common.collect.ImmutableMap;
 
-public final class DecayAttachment extends AbstractShipAttachment implements ServerTickListener, ISplitListener {
+public final class DecayAttachment extends AbstractTickableShipAttachment implements ISplitListener {
 	public static final String DECAY_PREFIX = "+decay+";
 	private static final ImmutableMap<Block, Block> STAGED = new ImmutableMap.Builder<Block, Block>()
 		.put(Blocks.ACACIA_LOG, Blocks.STRIPPED_ACACIA_LOG)
@@ -53,17 +53,12 @@ public final class DecayAttachment extends AbstractShipAttachment implements Ser
 	}
 
 	@Override
-	protected void afterInit() {
+	protected void onInit() {
 		this.rnd = new ShipRandomTickGenerator(this.getLevel(), this.getShip(), this.decayRate, DecayAttachment::onRandomTick);
 	}
 
 	@Override
-	public void onServerTick() {
-		final ServerLevel level = this.getLevel();
-		final ServerShip ship = this.getShip();
-		if (ship == null) {
-			return;
-		}
+	public void onServerTick(final ServerLevel level, final ServerShip ship) {
 		final String slug = ship.getSlug();
 		if (slug == null || !slug.startsWith(DECAY_PREFIX)) {
 			ship.saveAttachment(this.getClass(), null);

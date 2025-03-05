@@ -17,4 +17,11 @@ public interface IPlatformHelper {
 	 * @return The global {@link MinecraftServer} instance, {@code null} if the environment does not contain a server.
 	 */
 	MinecraftServer getMinecraftServer();
+
+	/**
+	 * Queue a task that will be executes at the end of the current tick.
+	 *
+	 * @param task The task going to be queue.
+	 */
+	void queuePostTick(Runnable task);
 }

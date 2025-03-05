@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.apigame.world.ServerShipWorldCore;
-import org.valkyrienskies.core.impl.game.ships.ShipObject;
 import org.valkyrienskies.mod.common.IShipObjectWorldServerProvider;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
@@ -37,7 +36,7 @@ public abstract class AbstractShipAttachment {
 		this.inited = true;
 	}
 
-	protected void afterInit() {}
+	protected void onInit() {}
 
 	protected final boolean tryInit() {
 		if (this.inited) {
@@ -50,14 +49,14 @@ public abstract class AbstractShipAttachment {
 			final String levelId = this.getShipDimensionId();
 			this.level = PlatformHelper.getLevelByVSDimension(server, levelId);
 			this.inited = true;
-			this.afterInit();
+			this.onInit();
 			return true;
 		}
 		return false;
 	}
 
 	private String getShipDimensionId() {
-		return ((ShipObject) (this.ship)).getChunkClaimDimension();
+		return this.ship.getChunkClaimDimension();
 	}
 
 	public final ServerLevel getLevel() {

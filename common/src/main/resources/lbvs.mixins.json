@@ -6,6 +6,7 @@
     "MixinBiomeManager",
     "MixinLevel",
     "MixinLevelChunk",
+    "MixinShipObjectServerWorld",
     "MixinSplitHandler"
   ],
   "injectors": {

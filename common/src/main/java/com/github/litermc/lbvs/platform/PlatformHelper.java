@@ -18,6 +18,10 @@ public final class PlatformHelper {
 		return LBVSServices.PLATFORM.getMinecraftServer();
 	}
 
+	public static void queuePostTick(Runnable task) {
+		LBVSServices.PLATFORM.queuePostTick(task);
+	}
+
 	public static ServerLevel getLevelByVSDimension(final MinecraftServer server, final String id) {
 		return StreamSupport.stream(server.getAllLevels().spliterator(), false)
 			.filter(lvl -> id.equals(VSGameUtilsKt.getDimensionId(lvl)))
