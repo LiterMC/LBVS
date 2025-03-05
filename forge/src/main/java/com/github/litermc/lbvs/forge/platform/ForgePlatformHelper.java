@@ -30,14 +30,15 @@ public final class ForgePlatformHelper implements IPlatformHelper {
 	}
 
 	@Override
-	public void queuePostTick(Runnable task) {
+	public void queuePostTick(final Runnable task) {
 		postTickQueue.add(task);
 	}
 
 	@SubscribeEvent
-	public static void serverTick(TickEvent.ServerTickEvent event) {
+	public static void serverTick(final TickEvent.ServerTickEvent event) {
 		switch (event.phase) {
-			case START -> {}
+			case START -> {
+			}
 			case END -> {
 				for (int remain = postTickQueue.size(); remain > 0; remain--) {
 					final Runnable task = postTickQueue.poll();

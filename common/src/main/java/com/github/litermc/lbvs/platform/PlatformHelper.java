@@ -18,7 +18,7 @@ public final class PlatformHelper {
 		return LBVSServices.PLATFORM.getMinecraftServer();
 	}
 
-	public static void queuePostTick(Runnable task) {
+	public static void queuePostTick(final Runnable task) {
 		LBVSServices.PLATFORM.queuePostTick(task);
 	}
 

@@ -38,7 +38,10 @@ public final class ConnectivityDataHolder extends AbstractTickableShipAttachment
 		this.anchables = new Long2ObjectOpenHashMap<>();
 	}
 
-	private ConnectivityDataHolder(final ServerLevel level, final ServerShip ship, final Long2ObjectOpenHashMap<EnumSet<Direction26>> anchables) {
+	private ConnectivityDataHolder(
+			final ServerLevel level,
+			final ServerShip ship,
+			final Long2ObjectOpenHashMap<EnumSet<Direction26>> anchables) {
 		super(level, ship);
 		this.anchables = anchables;
 	}
